@@ -9,7 +9,7 @@ const mongo = Mongo.getInstance();
 const dota = Dota.getInstance();
 const twitch = Twitch.getInstance();
 
-export default async function medal(channel: string, tags: ChatUserstate, commandName: string, debug: boolean = false, ...args: string[]): Promise<string> {
+export async function medal(channel: string, tags: ChatUserstate, commandName: string, debug: boolean = false, ...args: string[]): Promise<string> {
   const db = await mongo.db;
   const channelQuery = await db.collection('channels').findOne({ id: Number(tags['room-id']) });
   if (!channelQuery?.accounts?.length) throw new CustomError('No accounts connected');
@@ -33,7 +33,7 @@ export default async function medal(channel: string, tags: ChatUserstate, comman
   if (medalQuery) return medalQuery.name;
   return 'Unknown';
 }
-export async function gameMedals(channel: string, tags: ChatUserstate, commandName: string, debug: boolean = false, ...args: string[]): Promise<string> {
+export async function gameMedals(channel: string, tags: ChatUserstate, commandName: string, debug: boolean = false, json = false, ...args: string[]) {
   const db = await mongo.db;
   const channelQuery = await db.collection('channels').findOne({ id: Number(tags['room-id']) });
   if (!channelQuery?.accounts?.length) throw new CustomError('No accounts connected');
@@ -69,5 +69,10 @@ export async function gameMedals(channel: string, tags: ChatUserstate, commandNa
     const heroName = Dota.getHeroName(channelQuery, heroNames, game.lobby_type, i);
     result.push({ heroName, medal: medals[i] });
   }
-  return result.map((m) => `${m.heroName}: ${m.medal}`).join(', ');
+
+  if (json) {
+    return result
+  } else {
+    return result.map((m) => `${m.heroName}: ${m.medal}`).join(', ');
+  }
 }

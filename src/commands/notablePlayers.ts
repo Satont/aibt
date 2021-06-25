@@ -21,7 +21,7 @@ const parseNotablePlayers = async (game: {
   accounts: number[]
   self: boolean
   emotes: boolean
-}, debug: boolean): Promise<string> => {
+}, debug: boolean, json: boolean) => {
   const db = await mongo.db;
   const [heroesQuery, notablePlayersQuery, gameModesQuery] = await Promise.all([
     db.collection('heroes').find({
@@ -60,9 +60,17 @@ const parseNotablePlayers = async (game: {
       nps.push(`${np?.name || ''} (${debug ? `${game.players[i].account_id}, ` : ''}${heroName})`);
     }
   }
-  return `${game.weekend_tourney_skill_level ? `Battle cup T${game.weekend_tourney_skill_level} ${['', 'Finals', 'Semi Finals', 'Quarter Finals'][game.weekend_tourney_bracket_round as number]}` : gameMode}${mmr}: ${nps.length ? nps.join(', ') : 'No other notable player found'}`;
+  if (json) {
+    return {
+      gamemode:  `${game.weekend_tourney_skill_level ? `Battle cup T${game.weekend_tourney_skill_level} ${['', 'Finals', 'Semi Finals', 'Quarter Finals'][game.weekend_tourney_bracket_round as number]}` : gameMode}`,
+      mmr: game.average_mmr,
+      players: nps,
+    }
+  } else {
+    return `${game.weekend_tourney_skill_level ? `Battle cup T${game.weekend_tourney_skill_level} ${['', 'Finals', 'Semi Finals', 'Quarter Finals'][game.weekend_tourney_bracket_round as number]}` : gameMode}${mmr}: ${nps.length ? nps.join(', ') : 'No other notable player found'}`;
+  }
 };
-async function getNotablePlayers(tags: ChatUserstate, debug: boolean = false) {
+export async function getNotablePlayers(tags: ChatUserstate, debug: boolean = false, json = false) {
   const db = await mongo.db;
   const roomId = Number(tags['room-id']);
   const userId = Number(tags['user-id']);
@@ -75,11 +83,12 @@ async function getNotablePlayers(tags: ChatUserstate, debug: boolean = false) {
     //
   }
   const game = await Dota.findGame(channelDocument, true);
-  return parseNotablePlayers(game, channelDocument, debug);
+  return parseNotablePlayers(game, channelDocument, debug, json);
 }
-export default async function notablePlayers(channel: string, tags: ChatUserstate, commandName: string, ...args: string[]): Promise<string> {
+
+export default async function notablePlayers(channel: string, tags: ChatUserstate, commandName: string, ...args: string[]) {
   return getNotablePlayers(tags);
 }
-export async function notablePlayersDebug(channel: string, tags: ChatUserstate, commandName: string, ...args: string[]): Promise<string> {
+export async function notablePlayersDebug(channel: string, tags: ChatUserstate, commandName: string, ...args: string[]) {
   return getNotablePlayers(tags, true);
 }

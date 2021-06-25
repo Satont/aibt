@@ -1,10 +1,14 @@
+import 'dotenv/config'
+
 import Twitch from './twitch';
 import Dota from './dota';
 import Mongo from './mongo';
+import { bootstrap } from './api/main';
 
 const dota = Dota.getInstance();
 const twitch = Twitch.getInstance();
 const mongo = Mongo.getInstance();
+bootstrap()
 process.on('uncaughtException', async (err) => {
   const db = await mongo.db;
   db.collection('errors').insertOne({

@@ -51,8 +51,9 @@ export default class Twitch {
       const channelsSort = new Set<string>(liveStreamsToJoin);
       channelsQuery.forEach((channel) => channelsSort.add(channel.name));
       const channels = Array.from(channelsSort.values());
-      channels.unshift('9kmmrbot');
+      channels.unshift('aibt');
       this.client.getOptions().channels = channels;
+      console.log(this.client.getOptions().channels)
       this.client.connect();
     });
     this.client.on('emotesets', (_, emotesets) => {

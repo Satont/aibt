@@ -8,7 +8,13 @@ export default class Mongo {
   private client: Promise<MongoClient>;
 
   private connect(): Promise<Db> {
-    return this.client.then((client) => client.db()).catch(() => this.connect());
+    return this.client.then((client) => {
+      console.log('Connected to mongo')
+      return client.db()
+    }).catch((e) => {
+      console.log(e)
+      return this.connect()
+    });
   }
 
   private constructor() {

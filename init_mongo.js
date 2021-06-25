@@ -1,13 +1,13 @@
-db = db.getSiblingDB('9kmmrbot');
+db = db.getSiblingDB('aibt');
 db.cards.createIndex({ id: 1, lobby_id: -1 });
 db.channels.createIndex({ count: -1 });
 db.channels.createIndex({ id: 1 });
 const commands = [{
-  triggers: ['!9kmmrbot'], filename: './moderation', command: 'default', cooldown: 2000,
+  triggers: ['!aibt'], filename: './moderation', command: 'default', cooldown: 2000,
 }, {
-  triggers: ['!join'], filename: './joinPart', command: 'join', channels: [116840182], cooldown: 2000,
+  triggers: ['!join'], filename: './joinPart', command: 'join', channels: [254234138], cooldown: 2000,
 }, {
-  triggers: ['!part'], filename: './joinPart', command: 'part', channels: [116840182], cooldown: 2000,
+  triggers: ['!part'], filename: './joinPart', command: 'part', channels: [254234138], cooldown: 2000,
 }, {
   triggers: ['!np', '!notable', '!notableplayers'], filename: './notablePlayers', command: 'default', cooldown: 30000,
 }, {
@@ -47,7 +47,7 @@ const heroes = [{ localized_name: 'Not Picked', id: 0 }, { localized_name: 'Anti
   { localized_name: 'Faceless Void', id: 41 }, { localized_name: 'Wraith King', id: 42 }, { localized_name: 'Death Prophet', id: 43 },
   { localized_name: 'Phantom Assassin', id: 44 }, { localized_name: 'Pugna', id: 45 }, { localized_name: 'Templar Assassin', id: 46 },
   { localized_name: 'Viper', id: 47 }, { localized_name: 'Luna', id: 48 }, { localized_name: 'Dragon Knight', id: 49 }, { localized_name: 'Dazzle', id: 50 },
-  { localized_name: 'Clockwerk', id: 51 }, { localized_name: 'Leshrac', id: 52 }, { localized_name: "Nature's Prophet", id: 53 }, { localized_name: 'Lifestealer', id: 54 },
+  { localized_name: 'Clockwerk', id: 51 }, { localized_name: 'Leshrac', id: 52 }, { localized_name: 'Natures Prophet', id: 53 }, { localized_name: 'Lifestealer', id: 54 },
   { localized_name: 'Dark Seer', id: 55 }, { localized_name: 'Clinkz', id: 56 }, { localized_name: 'Omniknight', id: 57 }, { localized_name: 'Enchantress', id: 58 },
   { localized_name: 'Huskar', id: 59 }, { localized_name: 'Night Stalker', id: 60 }, { localized_name: 'Broodmother', id: 61 }, { localized_name: 'Bounty Hunter', id: 62 },
   { localized_name: 'Weaver', id: 63 }, { localized_name: 'Jakiro', id: 64 }, { localized_name: 'Batrider', id: 65 }, { localized_name: 'Chen', id: 66 },
@@ -82,6 +82,6 @@ const medals = [{ rank_tier: 0, name: 'Uncalibrated' }, { rank_tier: 11, name: '
   { rank_tier: 71, name: 'Divine☆1' }, { rank_tier: 72, name: 'Divine☆2' }, { rank_tier: 73, name: 'Divine☆3' }, { rank_tier: 74, name: 'Divine☆4' },
   { rank_tier: 75, name: 'Divine☆5' }, { rank_tier: 76, name: 'Divine☆6' }, { rank_tier: 77, name: 'Divine☆7' }, { rank_tier: 80, name: 'Immortal' }];
 db.medals.createIndex({ rank_tier: 1 });
-db.insertMany(medals);
+db.medals.insertMany(medals);
 db.notablePlayers.createIndex({ id: 1, channel: 1, enabled: 1 });
 db.rps.createIndex({ createdAt: -1 }, { expireAfterSeconds: 3600 });
